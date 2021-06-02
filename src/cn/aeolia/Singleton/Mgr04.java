@@ -1,4 +1,4 @@
-package cn.aeolia.singleton;
+package cn.aeolia.Singleton;
 
 /**
  * lazy loading延迟加载 懒汉式 虽然达到了按需初始化的目的，但却带来线程不安全的问题

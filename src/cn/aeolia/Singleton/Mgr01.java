@@ -1,4 +1,4 @@
-package cn.aeolia.singleton;
+package cn.aeolia.Singleton;
 
 /**
  * @Author aeolia

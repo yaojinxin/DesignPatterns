@@ -1,6 +1,7 @@
-package cn.aeolia.strategy;
+package cn.aeolia.Strategy;
 
 /**
+ * 策略接口的具体实现，根据比较内容实现不同的策略
  * @Author aeolia
  * @Date 2021/6/1 20:59
  */

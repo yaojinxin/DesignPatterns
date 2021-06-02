@@ -1,4 +1,4 @@
-package cn.aeolia.singleton;
+package cn.aeolia.Singleton;
 
 /**
  * 枚举类内部的每个实例都会被JVM默认加上static final，在JVM加载枚举类时保证了只初始化一次

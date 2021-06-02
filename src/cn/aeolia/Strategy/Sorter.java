@@ -1,4 +1,4 @@
-package cn.aeolia.strategy;
+package cn.aeolia.Strategy;
 
 import java.util.Comparator;
 

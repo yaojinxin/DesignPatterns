@@ -1,4 +1,4 @@
-package cn.aeolia.singleton;
+package cn.aeolia.Singleton;
 
 /**
  * 静态内部类方式
