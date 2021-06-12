@@ -13,8 +13,13 @@ public class Box {
     }
 
     public int getMilk() {
-        System.out.println("用户拿到第" + this.milk + "瓶奶");
-        return milk;
+        if (milk>0) {
+            System.out.println("用户拿到第" + this.milk-- + "瓶奶");
+            return milk;
+        }else{
+            System.out.println("消费者没有拿到牛奶");
+            return 0;
+        }
     }
 
     public void setMilk(int milk) {
