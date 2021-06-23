@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Vector;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @Author aeolia
@@ -20,13 +19,13 @@ public class ExerciseSell {
 
     public static void main(String[] args) throws InterruptedException {
         //模拟多人买票
-        TicketWindow ticketWindow = new TicketWindow(1000);
+        TicketWindow ticketWindow = new TicketWindow(100000);
         List<Integer> integers = new Vector<>();
         List<Thread> threads = new ArrayList<>();
         for (int i = 0; i < 2000; i++) {
             Thread thread = new Thread(() -> {
                 int sell = ticketWindow.sell(randomAmount());
-                    integers.add(sell);
+                integers.add(sell);
 
             });
             threads.add(thread);
@@ -39,6 +38,7 @@ public class ExerciseSell {
         //统计卖出的票数和剩余票数
         log.debug("余票：{}", ticketWindow.getCount());
         log.debug("卖出的票数：{}", integers.stream().mapToInt(value -> value).sum());
+        log.debug("合计：{}", ticketWindow.getCount() + integers.stream().mapToInt(value -> value).sum());
     }
 
     /**
@@ -47,7 +47,7 @@ public class ExerciseSell {
      * @return
      */
     public static int randomAmount() {
-        return random.nextInt(10) + 2;
+        return random.nextInt(10) + 1;
     }
 }
 
@@ -67,7 +67,7 @@ class TicketWindow {
      * @param amount
      * @return
      */
-    public int sell(int amount) {
+    public synchronized int sell(int amount) {
         if (this.count >= amount) {
             this.count -= amount;
             return amount;
