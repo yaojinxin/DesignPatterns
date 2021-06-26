@@ -159,13 +159,16 @@ public class TestBiased2 {
             for (int i = 0; i < loopNumber; i++) {
                 Dog d = new Dog();
                 list.add(d);
+                    log.debug(i + "\t" + ClassLayout.parseInstance(d).toPrintable());
                 synchronized (d) {
                     log.debug(i + "\t" + ClassLayout.parseInstance(d).toPrintable());
                 }
+                    log.debug(i + "\t" + ClassLayout.parseInstance(d).toPrintable());
             }
             LockSupport.unpark(t2);
         }, "t1");
         t1.start();
+
 
         t2 = new Thread(() -> {
             LockSupport.park();
