@@ -1,4 +1,4 @@
-package cn.aeolia.ThreadTest;
+package cn.aeolia.Others;
 
 import java.util.Scanner;
 

@@ -1,4 +1,4 @@
-package cn.aeolia.ThreadTest;
+package cn.aeolia.Others;
 
 import java.util.Scanner;
 
@@ -10,31 +10,33 @@ import java.util.Scanner;
 public class THREE_DIMENSIONAL_VECTOR {
     public static void main(String[] args) {
         boolean flag = false;
-        String first,second,third;
+        String first, second = null, third = null;
         do {
-            System.out.println("请输入第一个三维向量");
             first = new Scanner(System.in).nextLine();
-            if (!isConform(first)) {
-                System.out.println("输入不符");
-                continue;
-            }
-
-            System.out.println("请输入第二个三维向量");
             second = new Scanner(System.in).nextLine();
-            if (!isConform(second)) {
+            third = new Scanner(System.in).nextLine();
+            if (!isConform(first)|!isConform(second)|!isConform(third)) {
                 System.out.println("输入不符");
                 continue;
             }
-
-            System.out.println("请输入第三个三维向量");
-            third=new Scanner(System.in).nextLine();
-            if (!isConform(third)){
-                System.out.println("输入不符");
-                continue;
-            }
-            flag=true;
+            flag = true;
         } while (!flag);
 
+        if (flag) {
+            VecCal vecCal1 = transform(first);
+            VecCal vecCal2 = transform(second);
+            VecCal vecCal3 = transform(third);
+
+            VecCal resultForAdd = _add_(vecCal1, vecCal2);
+            VecCal resultForSub = _sub_(vecCal1, vecCal2);
+            VecCal resultForMul = _mul_(vecCal1, vecCal3);
+            VecCal resultForDiv = _div_(vecCal1, vecCal3);
+
+            System.out.println(vecCal1 + " + " + vecCal2 + " = " + resultForAdd);
+            System.out.println(vecCal1 + " - " + vecCal2 + " = " + resultForSub);
+            System.out.println(vecCal1 + " * " + vecCal3 + " = " + resultForMul);
+            System.out.println(vecCal1 + " / " + vecCal3 + " = " + resultForDiv);
+        }
 
 
     }
@@ -85,7 +87,7 @@ public class THREE_DIMENSIONAL_VECTOR {
 
     public static boolean isConform(String vecCal) {
         if (null != vecCal) {
-            if (vecCal.length()==1&&48<=vecCal.charAt(0)&&vecCal.charAt(0)<=57){
+            if (vecCal.length() == 1 && 48 <= vecCal.charAt(0) && vecCal.charAt(0) <= 57) {
                 return true;
             }
             String[] split = vecCal.split(",");
@@ -105,10 +107,27 @@ public class THREE_DIMENSIONAL_VECTOR {
         }
         return false;
     }
+
+    public static VecCal transform(String vecCal) {
+        if (vecCal.length() == 1) {
+            return new VecCal(Integer.valueOf(vecCal));
+        } else {
+            String[] split = vecCal.split(",");
+            return new VecCal(Integer.valueOf(split[0]), Integer.valueOf(split[1]), Integer.valueOf(split[2]));
+        }
+    }
 }
 
 class VecCal {
+    boolean isSame=false;
     int x, y, z;
+
+    public VecCal(int xyz) {
+        this.isSame=true;
+        this.x=xyz;
+        this.y=xyz;
+        this.z=xyz;
+    }
 
     public VecCal() {
     }
@@ -119,4 +138,11 @@ class VecCal {
         this.z = z;
     }
 
+    @Override
+    public String toString() {
+        if (this.isSame){
+            return String.valueOf(x);
+        }
+        return "(" + x + ", " + y + ", " + z + ')';
+    }
 }

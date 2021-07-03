@@ -1,4 +1,4 @@
-package cn.aeolia.ThreadTest;
+package cn.aeolia.Others;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -13,9 +13,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * @Author aeolia
@@ -26,18 +24,21 @@ public class Test8 {
     //爬虫网站(不要动)
     //https://wallhaven.cc/search?categories=110&purity=100&ratios=16x10&sorting=date_added&order=desc&page=6
     //https://wallhaven.cc/latest?
-    static String urlPath = "https://wallhaven.cc/search?q=One%20Piece&categories=110&purity=100&sorting=date_added&order=desc&";
+    //https://wallhaven.cc/search?q=One%20Piece&categories=110&purity=100&sorting=date_added&order=desc&
+    static String urlPath = "https://wallhaven.cc/search?categories=010&purity=100&sorting=hot&order=desc&";
     //保存文件路径(改成自己电脑的绝对路径放进来)
-    static String saveFilePath = "G:\\OnePiece\\";
+    static String saveFilePath = "G:\\Anime16_10_2\\";
     //开始和结束页码(取值1~14776  startPage要比overPage小)
     static int startPage = 1;
-    static int overPage = 39;
+    static int overPage = 13;
     //数据请求超时时间
     static int pageRequestTimeout=60000;
     //请求失败时的最大重试次数
     static int maximumNumberOfRetries = 10;
     //重试等待时间
     static int retryWaitingTime = 3000;
+    //浏览器伪装
+    static String User_Agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36";
     //线程集合
     static List<Thread> threadList = new Vector<>();
     static Document document;
@@ -46,13 +47,18 @@ public class Test8 {
     //计数锁
     static Object lock = new Object();
     //计数
-    static int successCount;
-    static int repeatCount;
-    static int failCount;
+    static int successCount=0;
+    static int repeatCount=0;
+    static int failCount=0;
 
     public static void main(String[] args) throws Exception {
+        File file=new File(saveFilePath);
+        if (!file.exists()){
+            file.mkdirs();
+        }
 
         List<String> list = new ArrayList<>();
+        Map<String,String> map=new HashMap<>();
         long startTime = System.currentTimeMillis();
 
         System.out.println("开始解析网页数据");
@@ -144,7 +150,7 @@ public class Test8 {
     public static boolean tryDownload(String urlPath) throws Exception {
         try {
             System.out.println("尝试请求图片路径：" + urlPath);
-            Document document = Jsoup.connect(urlPath).timeout(pageRequestTimeout).method(Connection.Method.GET).maxBodySize(0).followRedirects(false).get();
+            Document document = Jsoup.connect(urlPath).timeout(pageRequestTimeout).header("User-Agent",User_Agent).method(Connection.Method.GET).maxBodySize(0).followRedirects(false).get();
             System.out.println(urlPath + "请求成功,开始下载");
             Element wallpaper = document.getElementById("wallpaper");
             String src = wallpaper.attr("src");
@@ -216,7 +222,7 @@ public class Test8 {
      */
     public static boolean tryParsePage(URL url) throws InterruptedException {
         try {
-            document = Jsoup.connect(url.toString()).timeout(pageRequestTimeout).method(Connection.Method.GET).maxBodySize(0).followRedirects(false).get();
+            document = Jsoup.connect(url.toString()).timeout(pageRequestTimeout).header("User-Agent",User_Agent).method(Connection.Method.GET).maxBodySize(0).followRedirects(false).get();
 
             System.out.println("网页" + url + "解析成功");
             return true;

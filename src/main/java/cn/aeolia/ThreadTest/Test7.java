@@ -20,18 +20,23 @@ public class Test7 {
         GuardedObject guardedObject = new GuardedObject();
         new Thread(() -> {
             log.debug("等待结果");
-            List<String> response = (List<String>) guardedObject.getResponse();
-            writeToFile(response);
-            log.debug("结果的大小：{}", response.size());
+            List<String> response = (List<String>) guardedObject.getResponse(2000);
+            if (response != null) {
+                writeToFile(response);
+                log.debug("结果的大小：{}", response.size());
+            } else {
+                log.debug("结果的大小：{}", 0);
+            }
         }, "t1").start();
 
 
         new Thread(() -> {
             log.debug("执行下载");
             try {
+                Thread.sleep(3000);
                 List<String> download = Downloader.download();
                 guardedObject.setResponse(download);
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
         }, "t2").start();
@@ -52,19 +57,35 @@ public class Test7 {
 
 }
 
-
+@Slf4j(topic = "c.GuardedObject")
 class GuardedObject {
     private Object response;
 
-    public Object getResponse() {
+    /**
+     * @param timeOut 最大等待时间
+     * @return
+     */
+    public Object getResponse(long timeOut) {
         synchronized (this) {
-            try {
-                while (null == response) {
-                    this.wait();
+            //开始时间
+            long begin = System.currentTimeMillis();
+            //经历时间
+            long passedTime = 0;
+            while (null == response) {
+                try {
+                    if (passedTime >= timeOut) {
+                        log.debug("下载等待超时");
+                        break;
+                    }
+                    //剩余等待时间
+                    this.wait(timeOut - passedTime);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                passedTime = System.currentTimeMillis() - begin;
             }
+
+
         }
         return response;
     }
@@ -72,7 +93,7 @@ class GuardedObject {
     public void setResponse(Object response) {
         synchronized (this) {
             this.response = response;
-            this.notifyAll();
         }
+        this.notifyAll();
     }
 }
