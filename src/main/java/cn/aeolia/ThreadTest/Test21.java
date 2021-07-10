@@ -33,7 +33,7 @@ public class Test21 {
             synchronized (lock) {
                 log.debug("2");
                 flag.set(true);
-                lock.notify();
+                lock.notifyAll();
             }
 
         }, "t2");
