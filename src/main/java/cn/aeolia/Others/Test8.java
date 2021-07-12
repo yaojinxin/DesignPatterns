@@ -25,12 +25,12 @@ public class Test8 {
     //https://wallhaven.cc/search?categories=110&purity=100&ratios=16x10&sorting=date_added&order=desc&page=6
     //https://wallhaven.cc/latest?
     //https://wallhaven.cc/search?q=One%20Piece&categories=110&purity=100&sorting=date_added&order=desc&
-    static String urlPath = "https://wallhaven.cc/search?categories=010&purity=100&sorting=hot&order=desc&";
+    static String urlPath = "https://wallhaven.cc/latest?";
     //保存文件路径(改成自己电脑的绝对路径放进来)
-    static String saveFilePath = "G:\\Anime16_10_2\\";
+    static String saveFilePath = "G:\\latest\\";
     //开始和结束页码(取值1~14776  startPage要比overPage小)
     static int startPage = 1;
-    static int overPage = 13;
+    static int overPage = 5;
     //数据请求超时时间
     static int pageRequestTimeout=60000;
     //请求失败时的最大重试次数
